@@ -13,10 +13,11 @@ class VideoRepository
 
     public function add(Video $video): bool
     {
-        $sql = 'INSERT INTO videos (url, title) VALUES (?, ?)';
+        $sql = 'INSERT INTO videos (url, title, image_path) VALUES (?, ?)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(1, $video->url);
         $stmt->bindValue(2, $video->title);
+        $stmt->bindValue(3, $video->getFilePath());
 
         $result = $stmt->execute();
         $id = $this->pdo->lastInsertId();
