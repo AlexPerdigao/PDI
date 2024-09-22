@@ -36,11 +36,26 @@ class VideoRepository
 
     public function update(Video $video): bool
     {
-        $sql = "UPDATE videos SET url = :url, title = :title WHERE id = :id";
+        $updateImageSql = '';
+        if ($video->getFilePath() !== null) {
+            $updateImageSql = ', 
+                  image_path = :image_path';
+        }
+        $sql = "UPDATE videos SET 
+                  url = :url, 
+                  title = :title 
+                $updateImageSql
+              WHERE id = :id";
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':url', $video->url);
         $stmt->bindValue(':title', $video->title);
         $stmt->bindValue(':id', $video->id, PDO::PARAM_INT);
+
+        if ($video->getFilePath() !== null) {
+            $stmt->bindValue('image_path', $video->getFilePath());
+        }
+
         return $stmt->execute();
 
 
@@ -74,6 +89,10 @@ class VideoRepository
     {
         $video = new Video($videoData['url'], $videoData['title']);
         $video->setId($videoData['id']);
+
+        if ($videoData['image_path'] !== null) {
+            $video->setFilePath($videoData['image_path']);
+        }
         return $video;
     }
 }
