@@ -2,7 +2,7 @@
 
 use Alura\Mvc\Entity\Video;
 
-require_once __DIR__ . '/inicio-html.php';
+$this->layout('layout');
 /** @var Video|null $video */
 ?>
     <main class="container">
@@ -30,4 +30,3 @@ require_once __DIR__ . '/inicio-html.php';
             <input class="formulario__botao" type="submit" value="Enviar"/>
         </form>
     </main>
-<?php require_once __DIR__ . '/fim-html.php';
